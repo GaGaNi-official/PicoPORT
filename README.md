@@ -40,7 +40,7 @@ If you have any issues regarding game compatibility, please, enable verbose logg
 
 # About legality
 
-Think of this app like an emulator: you need to legally own the game files to use it.
+Think of this app like an emulator: you need to legally obtain the game files to use it.
 
 Obviously, to get a Quest game running on a different headset, the app has to strip away some entitlement checks.
 However, the game still won't launch on a Quest unless you’ve actually bought it.

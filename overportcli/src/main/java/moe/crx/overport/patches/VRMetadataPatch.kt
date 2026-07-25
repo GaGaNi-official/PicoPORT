@@ -31,7 +31,7 @@ fun createMetadataFloat(name: String, value: Float): JSONObject {
         ).put(
             JSONObject().put("name", "value").put("id", 16842788)
                 .put("uri", "http://schemas.android.com/apk/res/android").put("prefix", "android")
-                .put("value_type", "FLOAT").put("data", value)
+                .put("value_type", "FLOAT").put("data", value.toRawBits())
         )
     )
 }
@@ -91,6 +91,14 @@ fun createProperty(key: String, value: String): JSONObject {
 val PATCH_VR_METADATA = Patch("patch_vr_metadata") {
     selectManifestJson {
         takeNodesEach({ named("manifest") }) {
+            takeNodes {
+                this?.put(createUsesFeature("android.software.xr.api.openxr", true))
+                    ?.put(createUsesFeature("android.software.xr.api.spatial", true))
+                    ?.put(createUsesFeature("android.software.xr.input.controller", false))
+                    ?.put(createUsesPermission("org.khronos.openxr.permission.OPENXR"))
+                    ?.put(createUsesPermission("org.khronos.openxr.permission.OPENXR_SYSTEM"))
+                    ?.put(createUsesPermission("com.huawei.android.permission.VR"))
+            }
             takeNodesEach({ named("application") }) {
                 takeNodesEach({ named("activity") }) {
                     takeNodes {
@@ -107,15 +115,6 @@ val PATCH_VR_METADATA = Patch("patch_vr_metadata") {
                         )
                     }
                 }
-                takeNodes {
-                    this?.put(createUsesFeature("android.software.xr.api.openxr", true))
-                    this?.put(createUsesFeature("android.software.xr.api.spatial", true))
-                    this?.put(createUsesLibrary("libopenxr.google.so", false))
-                    this?.put(createUsesFeature("android.software.xr.input.controller", false))
-                        ?.put(createUsesPermission("org.khronos.openxr.permission.OPENXR"))
-                        ?.put(createUsesPermission("org.khronos.openxr.permission.OPENXR_SYSTEM"))
-                        ?.put(createUsesPermission("com.huawei.android.permission.VR"))
-                }
                 takeNodesEach({ named("meta-data") }) {
                     if (nameAttribute() == "com.oculus.supportedDevices") null else this
                 }
@@ -131,6 +130,7 @@ val PATCH_VR_METADATA = Patch("patch_vr_metadata") {
                         ?.put(createMetadata("com.htc.vr.content.NumController", "1,2"))
                         ?.put(createMetadata("com.htc.vr.content.NumDoFController", "3,6DoF"))
                         ?.put(createMetadata("com.htc.vr.content.NumDoFHmd", "3,6DoF"))
+                        ?.put(createUsesLibrary("libopenxr.google.so", false))
                 }
             }
         }
