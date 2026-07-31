@@ -95,9 +95,17 @@ val PATCH_VR_METADATA = Patch("patch_vr_metadata") {
                 this?.put(createUsesFeature("android.software.xr.api.openxr", true))
                     ?.put(createUsesFeature("android.software.xr.api.spatial", true))
                     ?.put(createUsesFeature("android.software.xr.input.controller", false))
+                    ?.put(createUsesFeature("android.hardware.xr.input.hand_tracking", false))
+                    ?.put(createUsesFeature("android.hardware.xr.input.eye_tracking", false))
                     ?.put(createUsesPermission("org.khronos.openxr.permission.OPENXR"))
                     ?.put(createUsesPermission("org.khronos.openxr.permission.OPENXR_SYSTEM"))
                     ?.put(createUsesPermission("com.huawei.android.permission.VR"))
+                    ?.put(createUsesPermission("android.permission.EYE_TRACKING_COARSE"))
+                    ?.put(createUsesPermission("android.permission.EYE_TRACKING_FINE"))
+                    ?.put(createUsesPermission("android.permission.FACE_TRACKING"))
+                    ?.put(createUsesPermission("android.permission.HAND_TRACKING"))
+                    ?.put(createUsesPermission("android.permission.SCENE_UNDERSTANDING_COARSE"))
+                    ?.put(createUsesPermission("android.permission.SCENE_UNDERSTANDING_FINE"))
             }
             takeNodesEach({ named("application") }) {
                 takeNodesEach({ named("activity") }) {
