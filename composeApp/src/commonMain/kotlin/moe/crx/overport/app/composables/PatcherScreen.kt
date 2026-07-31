@@ -101,6 +101,7 @@ fun PatcherScreen(
                         errorMessage =
                             getString(Res.string.cant_checkout_title) to getString(Res.string.cant_checkout_message)
                     } catch (ex: Throwable) {
+                        ex.printStackTrace()
                         viewModel.cancel()
                         errorMessage = getString(Res.string.unknown_error) to ex.stackTraceToString()
                     } finally {
