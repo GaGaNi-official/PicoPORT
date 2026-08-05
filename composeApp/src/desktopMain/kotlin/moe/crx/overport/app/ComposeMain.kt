@@ -13,6 +13,7 @@ import androidx.compose.ui.draganddrop.awtTransferable
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.formdev.flatlaf.util.SystemFileChooser
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import moe.crx.overport.app.composables.AppContent
@@ -24,7 +25,6 @@ import org.jetbrains.compose.resources.stringResource
 import overportapp.composeapp.generated.resources.Res
 import overportapp.composeapp.generated.resources.select_a_file
 import overportapp.composeapp.generated.resources.window_icon
-import java.awt.FileDialog
 import java.awt.Frame
 import java.awt.datatransfer.DataFlavor
 import java.io.*
@@ -97,23 +97,26 @@ fun main(args: Array<String>) = application {
             AppContent(
                 viewModel = viewModel,
                 openFile = {
-                    val fileDialog = FileDialog(Frame(), selectFileString, FileDialog.LOAD).apply {
-                        directory = lastOpenedDirectory
-                        isVisible = true
+                    val fileDialog = SystemFileChooser(selectFileString).apply {
+                        currentDirectory = File(lastOpenedDirectory)
+                        selectedFile = null
                     }
 
-                    val file = fileDialog.file?.let { File(fileDialog.directory).resolve(it) }
+                    val file = if (fileDialog.showOpenDialog(Frame()) != SystemFileChooser.APPROVE_OPTION) null else {
+                        fileDialog.selectedFile
+                    }
 
                     openFile(file)
                 },
                 saveFile = { name ->
-                    val fileDialog = FileDialog(Frame(), selectFileString, FileDialog.SAVE).apply {
-                        directory = lastOpenedDirectory
-                        file = name
-                        isVisible = true
+                    val fileDialog = SystemFileChooser(selectFileString).apply {
+                        currentDirectory = File(lastOpenedDirectory)
+                        selectedFile = File(lastOpenedDirectory, name)
                     }
 
-                    val file = fileDialog.file?.let { File(fileDialog.directory).resolve(it) }
+                    val file = if (fileDialog.showSaveDialog(Frame()) != SystemFileChooser.APPROVE_OPTION) null else {
+                        fileDialog.selectedFile
+                    }
 
                     scope.launch {
                         if (file == null) {
